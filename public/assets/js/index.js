@@ -24,7 +24,6 @@ const hide = (elem) => {
 
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
-
 const getNotes = () =>
   fetch('/api/notes', {
     method: 'GET',
@@ -101,6 +100,7 @@ const handleNoteView = (e) => {
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
   renderActiveNote();
 };
+
 
 // Sets the activeNote to and empty object and allows the user to enter a new note
 const handleNewNoteView = (e) => {
