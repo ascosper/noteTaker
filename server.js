@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3001
 const app = express()
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
-
+app.use(express.static('public'))
 function findByTitle(title, notesArray){
     const result = notesArray.filter(notes=> notes.title === title)[0]
     return result
@@ -57,6 +57,18 @@ app.post('/api/notes', (req, res) =>{
     res.json(note)
 }
     
+})
+app.get('/', (req,res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'))
+})
+app.get('/notes', (req,res) => {
+    res.sendFile(path.join(__dirname, './public/notes.html'))
+})
+app.get('/js', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/asssets/js/index.js'))
+})
+app.get('/css', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/assets/css/style.css'))
 })
 app.listen(PORT, () => {
     console.log( 'API server now on port')

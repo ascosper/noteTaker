@@ -1,3 +1,4 @@
+import  notes  from './db/db.json';
 let noteTitle;
 let noteText;
 let saveNoteBtn;
@@ -24,13 +25,29 @@ const hide = (elem) => {
 
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
-const getNotes = () =>
-  fetch('/api/notes', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+const getNotes = (formData = {}) =>{
+  let queryUrl = '/api/notes?'
+  Object.entries(formData).forEach(([key,value]) =>{
+  queryUrl += '${key}=${value}&'})
+  console.log(queryUrl)
+
+  .then (response=> {
+    if (!response.ok) {
+      return alert ('Error:' + response.statusText)
+    }
+    return response.json()
+  })
+  .then (noteData => {
+    console.log(noteData)
+    printResults(noteData)
+  })
+}
+  // fetch('/api/notes', {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  // });
 
 const saveNote = (note) =>
   fetch('/api/notes', {
@@ -76,6 +93,24 @@ const handleNoteSave = () => {
   });
 };
 
+fetch('/api/notes', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type' : 'appllication/json'
+  },
+  body: JSON.stringify(notes)
+})
+.then(response=> {
+  if (response.ok){
+    return response.json()
+  }
+  alert('Error:' + response.statusText)
+})
+.then(postReponse => {
+  console.log(postReponse)
+  alert('New note added!')
+})
 // Delete the clicked note
 const handleNoteDelete = (e) => {
   // Prevents the click listener for the list from being called when the button inside of it is clicked
